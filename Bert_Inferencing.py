@@ -13,10 +13,10 @@ import pandas as pd
 from bs4 import BeautifulSoup
 import random
 
-try:
-    %tensorflow_version 2.x
-except Exception:
-    pass
+# try:
+    # %tensorflow_version 2.x
+# except Exception:
+    # pass
 import tensorflow as tf
 
 import tensorflow_hub as hub
@@ -25,6 +25,8 @@ from tensorflow.keras import layers
 import bert
 
 # Get the GPU device name.
+print("_______________________________________________________________")
+print("Availability of GPU devices...........")
 device_name = tf.test.gpu_device_name()
 # The device name should look like the following:
 if device_name == '/device:GPU:0':
