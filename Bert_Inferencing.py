@@ -83,16 +83,20 @@ tokenizer = FullTokenizer(vocab_file, do_lower_case)
 
 def encode_sentence(sent):
     return tokenizer.convert_tokens_to_ids(tokenizer.tokenize(sent))
-data_inputs = [encode_sentence(sentence) for sentence in data_clean]
+# data_inputs = [encode_sentence(sentence) for sentence in data_clean]
 
-data_with_len = [[sent, data_labels[i], len(sent)]
-                 for i, sent in enumerate(data_inputs)]
-sorted_all = [(sent_lab[0], sent_lab[1])
-              for sent_lab in data_with_len if sent_lab[2] > 0]
+# data_with_len = [[sent, data_labels[i], len(sent)]
+                 # for i, sent in enumerate(data_inputs)]
+# sorted_all = [(sent_lab[0], sent_lab[1])
+              # for sent_lab in data_with_len if sent_lab[2] > 0]
 
 ######################################################################
 
-def bert_input_data(sorted_all):
+def bert_input_data(data_inputs):
+    data_with_len = [[sent,0, len(sent)]
+                     for i, sent in enumerate(data_inputs)]
+    sorted_all = [(sent_lab[0], sent_lab[1])
+                  for sent_lab in data_with_len if sent_lab[2] > 0]
     all_dataset = tf.data.Dataset.from_generator(lambda: sorted_all,
                                                  output_types=(tf.int32, tf.int32))
     BATCH_SIZE = 32
@@ -186,7 +190,7 @@ else:
 checkpoint_path = "final_training/cp.ckpt"
 Dcnn.load_weights(checkpoint_path)
 ###############################################################################
-X = sorted_all
+X = data_clean
 def get_test_data(size: int = 1):
     """Generates a test dataset of the specified size""" 
     num_rows = len(X)
@@ -224,41 +228,76 @@ from pathlib import Path
 from timeit import default_timer as timer
 
 NUM_LOOPS = 100
+
 def run_inference(num_observations:int = 1000):
     """Run xgboost for specified number of observations"""
     # Load data
-    test_df = get_test_data(num_observations)
-    data = bert_input_data(test_df)
-
-    num_rows = len(test_df)
-    print(f"running inference for {num_rows} sentence(s)..")
+    test_twt = get_test_data(num_observations)
+    num_rows = len(test_twt)
+    print(f"running data prep and inference for {num_rows} sentence(s)..")
+    
     run_times = []
+    bert_times = []
+    prep_time_wo_berts = []
+    prep_time_alls = []
+    prep_inf_times = []
     inference_times = []
+    
     for _ in range(NUM_LOOPS):
 
+        st_tm_bert = timer()
+        data_inputs = [encode_sentence(sentence) for sentence in test_twt]    
+        end_tm_bert = timer()
+
+        data = bert_input_data(data_inputs)
+#         end_tm_prep = timer()
+        
         start_time = timer()
-        Dcnn.predict(data)
+        pred_df = Dcnn.predict(data)
         end_time = timer()
 
         total_time = end_time - start_time
         run_times.append(total_time*10e3)
-
+        
+        bert_time = (end_tm_bert-st_tm_bert)*(10e6)/num_rows
+        prep_time_wo_bert = (start_time-end_tm_bert)*(10e6)/num_rows
+        prep_time_all = (start_time-st_tm_bert)*(10e6)/num_rows
         inference_time = total_time*(10e6)/num_rows
+        prep_inf_time = (end_time-st_tm_bert)*(10e6)/num_rows
+        
+        bert_times.append(bert_time)
+        prep_time_wo_berts.append(prep_time_wo_bert)
+        prep_time_alls.append(prep_time_all)
+        prep_inf_times.append(prep_inf_time)
         inference_times.append(inference_time)
+        
+    print("length of predicted df", len(pred_df))
+    
+    df1 = calculate_stats(bert_times)
+    df1["Flag"] = "Only Bert"
+    df2 = calculate_stats(prep_time_wo_berts)
+    df2["Flag"] = "Prep w/o Bert"
+    df3 = calculate_stats(prep_time_alls)
+    df3["Flag"] = "Prep with Bert"
+    df4 = calculate_stats(prep_inf_times)
+    df4["Flag"] = "Prep & Inf Time Total"
+    df5 = calculate_stats(inference_times)
+    df5["Flag"] = "Inference Time"
 
-    print(num_observations, ", ", calculate_stats(inference_times))
-    return calculate_stats(inference_times)
+    dfs = pd.concat([df1,df2,df3,df5,df4])
+    
+    print(num_observations, ", ", dfs)
+    return dfs
 
 STATS = '#, median, mean, std_dev, min_time, max_time, quantile_10, quantile_90'
 
-######################################################################
 print("_______________________________________________________________")
 print("Inferencing Started...........")
 if __name__=='__main__':
     ob_ct = 1  # Start with a single observation
     logging.info(STATS)
     temp_df = pd.DataFrame()
-    while ob_ct <= 100000:
+    while ob_ct <= 1000:
         temp = run_inference(ob_ct)
         temp["No_of_Observation"] = ob_ct
         temp_df = temp_df.append(temp)
