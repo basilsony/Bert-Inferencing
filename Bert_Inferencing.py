@@ -227,7 +227,7 @@ import logging
 from pathlib import Path
 from timeit import default_timer as timer
 
-NUM_LOOPS = 50
+NUM_LOOPS = 100
 
 def run_inference(num_observations:int = 1000):
     """Run xgboost for specified number of observations"""
