@@ -297,7 +297,7 @@ if __name__=='__main__':
     ob_ct = 1  # Start with a single observation
     logging.info(STATS)
     temp_df = pd.DataFrame()
-    while ob_ct <= 1000:
+    while ob_ct <= 100000:
         temp = run_inference(ob_ct)
         temp["No_of_Observation"] = ob_ct
         temp_df = temp_df.append(temp)
