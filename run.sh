@@ -13,7 +13,7 @@ cd Bert-Inferencing
 ## pip install --upgrade tensorflow-estimator==2.3.0
 logs_path=/home/ubuntu/Bert-Inferencing/logs/
 mkdir -p ${logs_path}
- export KMP_AFFINITY='noverbose,warnings,respect,granularity=fine,compact,1,0'
+export KMP_AFFINITY='noverbose,warnings,respect,granularity=fine,compact,1,0'
 export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libtcmalloc.so.4
 export TF_ENABLE_MKL_NATIVE_FORMAT=1
 export KMP_BLOCKTIME=1
@@ -24,4 +24,4 @@ i=1   # intra
 j=1   # inter
 file_name="${logs_path}/bs-${bs}_tuned_parameters_pip-tf-2.1.1_summary.csv"
 ## sudo install numactl
-python3 Bert_Inferencing.py
+python3 Bert_Inferencing_v2.py
