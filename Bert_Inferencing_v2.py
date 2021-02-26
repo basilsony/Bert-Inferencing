@@ -5,6 +5,13 @@ Created on Wed Nov 11 10:11:53 2020
 @author: tapojyoti.paul
 """
 
+
+## Loading Packages
+import numpy as np
+import math
+import re
+import pandas as pd
+from bs4 import BeautifulSoup
 import random
 import warnings
 warnings.filterwarnings("ignore")
