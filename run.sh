@@ -23,5 +23,6 @@ bs=all # batch size
 i=1   # intra
 j=1   # inter
 file_name="${logs_path}/bs-${bs}_tuned_parameters_pip-tf-2.1.1_summary.csv"
-## sudo install numactl
+## sudo apt install numactl
+## numactl --physcpubind=0-7 -m 0 python Bert_Inferencing.py -a ${i} -e ${j} -s ${file_name}
 python3 Bert_Inferencing_v2.py
