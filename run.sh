@@ -8,7 +8,7 @@ pip install intel-tensorflow
 ## conda install -c conda-forge -y tensorflow-gpu
 pip install tensorflow_hub
 pip install bert-for-tf2
-git clone https://github.com/tapojyotipaul/Bert-Inferencing
+git clone https://github.com/basilsony/Bert-Inferencing
 cd Bert-Inferencing
 ## pip install --upgrade tensorflow-estimator==2.3.0
 logs_path=/home/ubuntu/Bert-Inferencing/logs/

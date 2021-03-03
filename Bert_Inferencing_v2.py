@@ -4,6 +4,22 @@ Created on Wed Nov 11 10:11:53 2020
 
 @author: tapojyoti.paul
 """
+import os
+os.environ["KMP_BLOCKTIME"] = "1"
+os.environ["KMP_SETTINGS"] = "1"
+os.environ["KMP_AFFINITY"]= "noverbose,warnings,respect,granularity=fine,compact,1,0"
+
+os.environ["OMP_NUM_THREADS"]= "7"
+os.environ["LD_PRELOAD"]= "/usr/lib/x86_64-linux-gnu/libtcmalloc.so.4"
+os.environ["TF_ENABLE_MKL_NATIVE_FORMAT "]= "1"
+
+import tensorflow as tf
+import tensorflow_hub as hub
+from tensorflow.keras import layers
+
+tf.config.threading.set_inter_op_parallelism_threads(1)
+tf.config.threading.set_intra_op_parallelism_threads(1)
+
 
 
 ## Loading Packages
@@ -16,16 +32,6 @@ import random
 import warnings
 warnings.filterwarnings("ignore")
 
-import os
-# try:
-    # %tensorflow_version 2.x
-# except Exception:
-    # pass
-import tensorflow as tf
-
-import tensorflow_hub as hub
-
-from tensorflow.keras import layers
 import bert
 
 # Get the GPU device name.
@@ -38,16 +44,7 @@ if device_name == '/device:GPU:0':
 else:
     print('GPU device not found')
 
-###################################################
-os.environ["KMP_BLOCKTIME"] = "1"
-os.environ["KMP_SETTINGS"] = "1"
-os.environ["KMP_AFFINITY"]= "noverbose,warnings,respect,granularity=fine,compact,1,0"
 
-os.environ["OMP_NUM_THREADS"]= "7"
-os.environ["LD_PRELOAD"]= "/usr/lib/x86_64-linux-gnu/libtcmalloc.so.4"
-os.environ["TF_ENABLE_MKL_NATIVE_FORMAT "]= "1"
-tf.config.threading.set_inter_op_parallelism_threads(1)
-tf.config.threading.set_intra_op_parallelism_threads(1)
 
 ## Loading Dataset
 ###################################################
