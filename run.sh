@@ -10,6 +10,7 @@ pip install tensorflow_hub
 pip install bert-for-tf2
 git clone https://github.com/basilsony/Bert-Inferencing
 cd Bert-Inferencing
+sudo apt-get install google-perftools
 ## pip install --upgrade tensorflow-estimator==2.3.0
 logs_path=/home/ubuntu/Bert-Inferencing/logs/
 mkdir -p ${logs_path}
