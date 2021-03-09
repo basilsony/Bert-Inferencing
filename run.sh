@@ -7,8 +7,8 @@ conda init bash
 pip install intel-tensorflow==2.1.1
 pip install keras
 pip install pandas
-pip install bf4
-pip intstall lxml
+pip install bs4
+pip install lxml
 ## conda install -c conda-forge -y tensorflow-gpu
 pip install tensorflow_hub
 pip install bert-for-tf2
