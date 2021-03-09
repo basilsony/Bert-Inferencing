@@ -3,6 +3,10 @@
 # Activate environment and install packages
 conda init bash
 
+#sudo apt install virtualenv
+#virtualenv --clear -p python3 test_env
+#source test_env/bin/activate
+
 #conda install -c conda-forge -y keras
 pip install intel-tensorflow==2.1.1
 pip install keras
