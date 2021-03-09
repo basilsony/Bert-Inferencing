@@ -3,8 +3,12 @@
 # Activate environment and install packages
 conda init bash
 
-conda install -c conda-forge -y keras
-pip install intel-tensorflow
+#conda install -c conda-forge -y keras
+pip install intel-tensorflow==2.1.1
+pip install keras
+pip install pandas
+pip install bf4
+pip intstall lxml
 ## conda install -c conda-forge -y tensorflow-gpu
 pip install tensorflow_hub
 pip install bert-for-tf2
@@ -19,7 +23,7 @@ export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libtcmalloc.so.4
 export TF_ENABLE_MKL_NATIVE_FORMAT=1
 export KMP_BLOCKTIME=1
 export OMP_NUM_THREADS=7
-export MKLDNN_VERBOSE=1
+#export MKLDNN_VERBOSE=1
 bs=all # batch size
 i=1   # intra
 j=1   # inter
