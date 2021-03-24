@@ -1,7 +1,7 @@
 # Bert-Inferencing
 Inferencing time calculation using BERT for Sentiment Analysis of Tweets
 ## Steps to Run  
-###Set Up environment   
+### Set Up environment   
 sudo apt-get install cpufrequtils  
 sudo systemctl disable ondemand.service     
 sudo apt-get install google-perftools  
